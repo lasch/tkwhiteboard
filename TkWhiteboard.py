@@ -21,6 +21,9 @@
 #####################################################
 # README:
 #
+# usage: TkWhiteboard.py [<background_picture_file>]
+#
+#
 # All it provides is:
 # * a canvas area for drawings.
 # * 4 pre-defined colors (black, red, blue, green)
@@ -52,8 +55,7 @@
 #         substantially more than on a real whiteboard ;-)
 #
 # Feb'22: Added a rudimentary way to continue drawing from a screenshot
-#         place the image (or a softlink) named 'background.png' in CWD
-#         it will load that image at startup
+#         by providing the file name as the first cmdline argument
 #         (note: clear board will delete image)
 #
 # feature requests, suggestions, improvements and help with coding are
@@ -76,6 +78,7 @@
 
 import time
 import os
+import argparse
 
 from Tkinter import *
 
@@ -310,6 +313,12 @@ def key_handler(event):
         bg=color_map[ paint_mode * color ] )
 
 
+
+parser = argparse.ArgumentParser()
+parser.add_argument("background_file", help="Name of picture to load at start.", type=str)
+args = parser.parse_args()
+
+
 # placement of window elements and key bindings
 master.title("Simple WhiteBoard")
 
@@ -328,7 +337,7 @@ colorbar.pack(side=RIGHT)
 statuslineframe.pack(side=TOP)
 board.pack(side=BOTTOM)
 
-img = PhotoImage(file='background.png')
-board.create_image(10,10,anchor=NW,image=img) # add background image
+img = PhotoImage(file=args.background_file)
+board.create_image(0,0,anchor=NW,image=img) # add background image
 
 master.mainloop()
